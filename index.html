@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coachella Route Planner</title>
+  <script>
+    // Auto-dispatch touch-only devices to the mobile page. Runs before any
+    // stylesheet load so we don't waste work parsing desktop CSS we're
+    // about to replace. A manual "Mobile"/"Desktop" switch link writes
+    // `preferred_version` which overrides the auto-detection.
+    (function() {
+      try {
+        var pref = localStorage.getItem('preferred_version');
+        if (pref === 'desktop') return;
+        var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        if (pref === 'mobile' || coarse) {
+          window.location.replace('mobile.html' + window.location.hash);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="css/onboarding.css" />
+  <script>
+    // Apply theme before first paint to avoid FOUC.
+    // Default is light; only switch to dark if the user explicitly chose it.
+    (function() {
+      try {
+        var t = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>Coachella Route Planner</h1>
+      <div class="global-controls">
+        <label>
+          Day
+          <select id="day-select">
+            <option value="w1_fri">Weekend 1 — Friday</option>
+            <option value="w1_sat">Weekend 1 — Saturday</option>
+            <option value="w1_sun">Weekend 1 — Sunday</option>
+            <option value="w2_fri">Weekend 2 — Friday</option>
+            <option value="w2_sat">Weekend 2 — Saturday</option>
+            <option value="w2_sun">Weekend 2 — Sunday</option>
+          </select>
+        </label>
+        <label>
+          Walk speed
+          <select id="speed-select">
+            <option value="lot8">Lot 8 Crawler (0.1 m/s)</option>
+            <option value="slow">Slow (0.8 m/s)</option>
+            <option value="normal" selected>Normal (1.2 m/s)</option>
+            <option value="fast">Fast (1.5 m/s)</option>
+          </select>
+        </label>
+        <label>
+          Walk padding
+          <input type="number" id="padding-input" min="0" max="30" value="2" step="1" />
+          min
+        </label>
+      </div>
+    </div>
+    <div class="header-right">
+      <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-label="Toggle dark mode" title="Toggle dark / light mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-thumb">
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+        </span>
+      </button>
+      <div class="trailing-buttons">
+        <button type="button" id="btn-help" class="help-link" title="How to use this app">Help</button>
+        <button type="button" id="btn-image" class="share-button" title="Open a schedule image in a new tab — save it to your phone for offline use at the festival">Image</button>
+        <button type="button" id="btn-share" class="share-button" title="Copy a shareable link to this plan">Share link</button>
+        <a href="mobile.html" id="link-mobile" class="version-switch" title="Switch to the mobile view">Mobile</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="acts-panel">
+      <h2>Acts</h2>
+      <div class="bulk-actions">
+        <button type="button" id="btn-select-all">Select all</button>
+        <button type="button" id="btn-deselect-all">Deselect all</button>
+        <button type="button" id="btn-random">Random</button>
+        <button type="button" id="btn-see-most" title="Replace all picks with the maximum number of acts you could physically see for at least 5 minutes each">x-games mode</button>
+      </div>
+      <p class="hint">Toggle priority: blank = skip, <span class="tier-want">want</span>, <span class="tier-must">can't miss</span>. Click an act name to cycle.</p>
+      <div id="acts-list"></div>
+    </section>
+
+    <section id="schedule-panel">
+      <h2>Your Route</h2>
+      <div id="timeline-container">
+        <svg id="timeline" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div id="issues"></div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

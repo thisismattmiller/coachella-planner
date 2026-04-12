@@ -1,0 +1,435 @@
+/* Mobile-first styles for the rotated-timeline planner.
+   Intentionally separate from styles.css so the desktop page is untouched. */
+
+:root {
+  --bg: #111;
+  --bg-header: #1a1a1a;
+  --bg-panel: #0a0a0a;
+  --bg-input: #222;
+  --bg-button: #222;
+  --bg-button-hover: #2e2e2e;
+
+  --text: #eee;
+  --text-muted: #888;
+  --text-label: #bbb;
+
+  --border: #333;
+  --border-soft: #2a2a2a;
+  --border-input: #444;
+
+  --tier-want: #4aa3ff;
+  --tier-must: #ff6b4a;
+  --tier-want-fill: rgba(74, 163, 255, 0.35);
+  --tier-must-fill: rgba(255, 107, 74, 0.35);
+
+  --act-bar-fill: #222;
+  --act-bar-stroke: #333;
+  --act-bar-label: #888;
+  --act-bar-scheduled-fill: #2a2a3a;
+  --act-bar-scheduled-stroke: #3a3a4a;
+  --act-bar-dropped-fill: #1a1a1a;
+  --act-bar-dropped-stroke: #555;
+
+  --grid-line: #222;
+  --tick-line: #2a2a2a;
+  --walk-line: #ffcc44;
+
+  --issues-errors-bg: #2a1010;
+  --issues-errors-border: #4a1a1a;
+  --issues-dropped-bg: #1a1510;
+  --issues-dropped-border: #2a2520;
+  --issues-schedule-bg: #101a20;
+  --issues-schedule-border: #1a2530;
+}
+
+:root[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-header: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-input: #ffffff;
+  --bg-button: #ffffff;
+  --bg-button-hover: #f0f0f0;
+
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --text-label: #444;
+
+  --border: #d5d5d5;
+  --border-soft: #e6e6e6;
+  --border-input: #c0c0c0;
+
+  --tier-want: #0b66c2;
+  --tier-must: #c1391a;
+  --tier-want-fill: rgba(11, 102, 194, 0.25);
+  --tier-must-fill: rgba(193, 57, 26, 0.25);
+
+  --act-bar-fill: #eeeeee;
+  --act-bar-stroke: #cfcfcf;
+  --act-bar-label: #666;
+  --act-bar-scheduled-fill: #e4ebf7;
+  --act-bar-scheduled-stroke: #b6c5e0;
+  --act-bar-dropped-fill: #f5f5f5;
+  --act-bar-dropped-stroke: #b0b0b0;
+
+  --grid-line: #e8e8e8;
+  --tick-line: #d0d0d0;
+  --walk-line: #d98a00;
+
+  --issues-errors-bg: #fbe4e0;
+  --issues-errors-border: #e0a89d;
+  --issues-dropped-bg: #fbf1e4;
+  --issues-dropped-border: #d8c29a;
+  --issues-schedule-bg: #e4eef7;
+  --issues-schedule-border: #a8c1dc;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior-y: none;
+}
+
+/* While actively dragging a watch window, completely block page scroll so
+   the gesture can't be hijacked by iOS Safari. Toggled from JS via
+   document.body.classList. */
+body.dragging {
+  overflow: hidden;
+  touch-action: none;
+}
+body.dragging #timeline-container {
+  touch-action: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- Header ---------- */
+
+#mobile-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px calc(10px + env(safe-area-inset-top, 0px)) 12px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.header-row h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border-input);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+}
+
+.theme-icon {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+
+:root[data-theme="light"] .theme-icon-moon,
+:root[data-theme="dark"] .theme-icon-sun {
+  display: none;
+}
+
+.controls-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.controls-row select,
+.controls-row input {
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border-input);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.controls-row select { flex: 1; }
+
+.pad-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-label);
+}
+
+.pad-label input { width: 46px; text-align: right; }
+
+.action-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.action-row button,
+.action-row .desktop-link {
+  flex: 1;
+  background: var(--bg-button);
+  color: var(--text);
+  border: 1px solid var(--border-input);
+  border-radius: 4px;
+  padding: 7px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Help button on mobile: compact square ? instead of a wide text button. */
+.action-row .help-link {
+  flex: 0 0 30px;
+  width: 30px;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+/* Desktop link on mobile: compact, no trailing arrow needed. */
+.action-row .desktop-link {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.action-row button:active { background: var(--bg-button-hover); }
+
+#btn-see-most {
+  background: linear-gradient(135deg, var(--tier-want), var(--tier-must));
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.share-button.flash-ok {
+  background: var(--tier-want);
+  color: #fff;
+  border-color: var(--tier-want);
+}
+
+.desktop-link {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---------- Timeline ---------- */
+
+main {
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+#timeline-container {
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 0;
+  /* Vertical scroll for the tall rotated timeline. */
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+#issues {
+  padding: 0 8px;
+}
+
+svg#timeline {
+  display: block;
+  width: 100%;
+  /* Height set by JS from viewBox. */
+}
+
+/* SVG element styles */
+
+.venue-label {
+  fill: var(--text-label);
+  font-size: 10px;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.hour-label {
+  fill: var(--text-muted);
+  font-size: 10px;
+  font-family: inherit;
+}
+
+.grid-line {
+  stroke: var(--grid-line);
+  stroke-width: 1;
+}
+
+.tick-line {
+  stroke: var(--tick-line);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.act-bar {
+  fill: var(--act-bar-fill);
+  stroke: var(--act-bar-stroke);
+  stroke-width: 1;
+  cursor: pointer;
+}
+
+.act-bar-scheduled {
+  fill: var(--act-bar-scheduled-fill);
+  stroke: var(--act-bar-scheduled-stroke);
+}
+
+.act-bar-dropped {
+  fill: url(#hatch-dropped);
+  stroke: var(--act-bar-dropped-stroke);
+}
+
+.hatch-bg { fill: var(--act-bar-dropped-fill); }
+.hatch-line {
+  stroke: var(--act-bar-dropped-stroke);
+  stroke-width: 2;
+}
+
+.act-bar-label {
+  fill: var(--text);
+  font-weight: 500;
+  font-family: inherit;
+  pointer-events: none;
+}
+
+/* Solid backing rect behind label text. Matches the underlying bar type
+   so it blends on flat bars and cuts through the hatch on dropped bars. */
+.act-bar-label-bg {
+  fill: var(--act-bar-fill);
+  pointer-events: none;
+}
+.act-bar-label-bg-scheduled {
+  fill: var(--act-bar-scheduled-fill);
+}
+.act-bar-label-bg-dropped {
+  fill: var(--act-bar-dropped-fill);
+}
+
+.act-bar-label text {
+  dominant-baseline: hanging;
+}
+
+.watch-window {
+  stroke-width: 2;
+  /* Prevent touch from scrolling the page while manipulating the window. */
+  touch-action: none;
+}
+
+.watch-want {
+  fill: var(--tier-want-fill);
+  stroke: var(--tier-want);
+}
+
+.watch-must {
+  fill: var(--tier-must-fill);
+  stroke: var(--tier-must);
+}
+
+.drag-handle {
+  fill: var(--text);
+  opacity: 0.45;
+  touch-action: none;
+}
+.drag-handle:active {
+  opacity: 0.75;
+}
+
+.walk-line {
+  stroke: var(--walk-line);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ---------- Issues panel ---------- */
+
+#issues { margin-top: 12px; }
+
+#issues h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 10px 0 4px 0;
+  color: var(--text-muted);
+}
+
+#issues ul, #issues ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+#issues li { margin-bottom: 4px; }
+
+.issues-errors h3 { color: var(--tier-must); }
+.issues-errors {
+  background: var(--issues-errors-bg);
+  border: 1px solid var(--issues-errors-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+.issues-dropped {
+  background: var(--issues-dropped-bg);
+  border: 1px solid var(--issues-dropped-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+.issues-schedule {
+  background: var(--issues-schedule-bg);
+  border: 1px solid var(--issues-schedule-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+
+.muted { color: var(--text-muted); font-weight: normal; }

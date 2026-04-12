@@ -1,0 +1,37 @@
+Dest A and B,Dest A,Dest B,Meter,Feet,Slow Walker 0.8 m/s,Normal Walker 1.2 m/s,Fast Walker 1.5 m/s
+Coachella Stage ↔ Mojave,Coachella Stage,Mojave,431.75,1416.502625,539.6875,359.7916667,287.8333333
+Coachella Stage ↔ Outdoor Theatre,Coachella Stage,Outdoor Theatre,315.99,1036.712598,394.9875,263.325,210.66
+Coachella Stage ↔ Gobi,Coachella Stage,Gobi,295.68,970.0787402,369.6,246.4,197.12
+Coachella Stage ↔ Sonora,Coachella Stage,Sonora,224.73,737.3031496,280.9125,187.275,149.82
+Coachella Stage ↔ Sahara,Coachella Stage,Sahara,754.7,2476.049869,943.375,628.9166667,503.1333333
+Coachella Stage ↔ Yuma,Coachella Stage,Yuma,365.8,1200.131234,457.25,304.8333333,243.8666667
+Mojave ↔ Outdoor Theatre,Mojave,Outdoor Theatre,506.21,1660.793963,632.7625,421.8416667,337.4733333
+Mojave ↔ Gobi,Mojave,Gobi,135.07,443.1430446,168.8375,112.5583333,90.04666667
+Mojave ↔ Sonora,Mojave,Sonora,217.55,713.7467192,271.9375,181.2916667,145.0333333
+Mojave ↔ Sahara,Mojave,Sahara,584.69,1918.274278,730.8625,487.2416667,389.7933333
+Mojave ↔ Yuma,Mojave,Yuma,578.71,1898.654856,723.3875,482.2583333,385.8066667
+Outdoor Theatre ↔ Gobi,Outdoor Theatre,Gobi,364.86,1197.047244,456.075,304.05,243.24
+Outdoor Theatre ↔ Sonora,Outdoor Theatre,Sonora,277.61,910.7939633,347.0125,231.3416667,185.0733333
+Outdoor Theatre ↔ Sahara,Outdoor Theatre,Sahara,"1,028.43",3374.114173,1285.5375,857.025,685.62
+Outdoor Theatre ↔ Yuma,Outdoor Theatre,Yuma,649.1,2129.593176,811.375,540.9166667,432.7333333
+Gobi ↔ Sonora,Gobi,Sonora,72.57,238.0905512,90.7125,60.475,48.38
+Gobi ↔ Sahara,Gobi,Sahara,679.09,2227.985564,848.8625,565.9083333,452.7266667
+Gobi ↔ Yuma,Gobi,Yuma,493.32,1618.503937,616.65,411.1,328.88
+Sonora ↔ Sahara,Sonora,Sahara,771.56,2531.364829,964.45,642.9666667,514.3733333
+Sonora ↔ Yuma,Sonora,Yuma,472.8,1551.181102,591,394,315.2
+Sahara ↔ Yuma,Sahara,Yuma,815.8,2676.509186,1019.75,679.8333333,543.8666667
+Coachella Stage ↔ Quasar,Coachella Stage,Quasar,462.1,1516.076115,577.625,385.0833333,308.0666667
+Mojave ↔ Quasar,Mojave,Quasar,178.14,584.4488189,222.675,148.45,118.76
+Outdoor Theatre ↔ Quasar,Outdoor Theatre,Quasar,614.48,2016.010499,768.1,512.0666667,409.6533333
+Gobi ↔ Quasar,Gobi,Quasar,286.43,939.7309711,358.0375,238.6916667,190.9533333
+Sonora ↔ Quasar,Sonora,Quasar,348.4,1143.044619,435.5,290.3333333,232.2666667
+Sahara ↔ Quasar,Sahara,Quasar,422.99,1387.762467,528.7375,352.4916667,281.9933333
+Yuma ↔ Quasar,Yuma,Quasar,555.08,1821.128609,693.85,462.5666667,370.0533333
+Coachella Stage ↔ Dolab,Coachella Stage,Dolab,536.41,1759.875328,670.5125,447.0083333,357.6066667
+Mojave ↔ Dolab,Mojave,Dolab,312.59,1025.557743,390.7375,260.4916667,208.3933333
+Outdoor Theatre ↔ Dolab,Outdoor Theatre,Dolab,819.93,2690.059055,1024.9125,683.275,546.62
+Gobi ↔ Dolab,Gobi,Dolab,455.07,1493.011811,568.8375,379.225,303.38
+Sonora ↔ Dolab,Sonora,Dolab,543.66,1783.661417,679.575,453.05,362.44
+Sahara ↔ Dolab,Sahara,Dolab,207.09,679.4291339,258.8625,172.575,138.06
+Yuma ↔ Dolab,Yuma,Dolab,606.17,1988.746719,757.7125,505.1416667,404.1133333
+Quasar ↔ Dolab,Quasar,Dolab,248.49,815.2559055,310.6125,207.075,165.66

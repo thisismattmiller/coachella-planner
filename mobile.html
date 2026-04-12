@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Coachella Route Planner — Mobile</title>
+  <script>
+    // Respect a manual "Desktop" preference — if the user explicitly chose
+    // desktop, bounce them to index.html even if they landed on mobile.html
+    // directly. Otherwise stay put.
+    (function() {
+      try {
+        if (localStorage.getItem('preferred_version') === 'desktop') {
+          window.location.replace('index.html' + window.location.hash);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="css/onboarding.css" />
+  <script>
+    // Apply theme before first paint to avoid FOUC.
+    // Default is light; only switch to dark if the user explicitly chose it.
+    (function() {
+      try {
+        var t = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <header id="mobile-header">
+    <div class="header-row">
+      <h1>Route Planner</h1>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path><path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path><path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="controls-row">
+      <select id="day-select">
+        <option value="w1_fri">W1 — Fri</option>
+        <option value="w1_sat">W1 — Sat</option>
+        <option value="w1_sun">W1 — Sun</option>
+        <option value="w2_fri">W2 — Fri</option>
+        <option value="w2_sat">W2 — Sat</option>
+        <option value="w2_sun">W2 — Sun</option>
+      </select>
+      <select id="speed-select">
+        <option value="lot8">Lot 8 Crawler</option>
+        <option value="slow">Slow</option>
+        <option value="normal" selected>Normal</option>
+        <option value="fast">Fast</option>
+      </select>
+      <label class="pad-label">
+        Pad
+        <input type="number" id="padding-input" min="0" max="30" value="2" step="1" />m
+      </label>
+    </div>
+
+    <div class="action-row">
+      <button type="button" id="btn-help" class="help-link" title="How to use this app">?</button>
+      <button type="button" id="btn-deselect-all">Clear</button>
+      <button type="button" id="btn-see-most">xgames</button>
+      <button type="button" id="btn-image" title="Open a schedule image in a new tab">Image</button>
+      <button type="button" id="btn-share" class="share-button">Link</button>
+      <a href="index.html" id="link-desktop" class="desktop-link">Desktop</a>
+    </div>
+  </header>
+
+  <main>
+    <div id="timeline-container">
+      <svg id="timeline" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div id="issues"></div>
+  </main>
+
+  <script type="module" src="js/mobile-main.js"></script>
+</body>
+</html>

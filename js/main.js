@@ -1,5 +1,5 @@
 // App wiring.
-import { loadDay, loadVenues } from './data.js';
+import { loadDay, loadVenues, getDefaultDayKey } from './data.js';
 import { solve } from './solver.js';
 import { renderActsList, renderTimeline, renderIssues } from './ui.js';
 import { encodeState, decodeState } from './share.js';
@@ -7,7 +7,7 @@ import { exportScheduleImage } from './export-image.js';
 import { maybeShowOnboarding, showOnboarding } from './onboarding.js';
 
 const state = {
-  dayKey: 'w1_fri',
+  dayKey: getDefaultDayKey(),
   speed: 'normal',
   paddingMin: 2,
   acts: [],
@@ -75,6 +75,9 @@ async function init() {
     el.paddingInput.value = String(state.paddingMin);
     await loadDayData(state.dayKey, { picksBuilder: shared.picksBuilder });
   } else {
+    // Sync the day-picker to whatever default we computed (today's festival
+    // day or the next one upcoming).
+    el.daySelect.value = state.dayKey;
     await loadDayData(state.dayKey);
   }
 

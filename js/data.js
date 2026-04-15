@@ -138,3 +138,43 @@ export async function loadDay(dayKey) {
     };
   }).sort((a, b) => a.startMin - b.startMin || a.name.localeCompare(b.name));
 }
+
+// --- Default-day picker ------------------------------------------------
+
+// 2026 festival calendar. Extend here when future years are added.
+// Each festival day rolls over to the next at 6 AM local (covers after-afters).
+const FESTIVAL_DAYS = [
+  { dayKey: 'w1_fri', date: '2026-04-10' },
+  { dayKey: 'w1_sat', date: '2026-04-11' },
+  { dayKey: 'w1_sun', date: '2026-04-12' },
+  { dayKey: 'w2_fri', date: '2026-04-17' },
+  { dayKey: 'w2_sat', date: '2026-04-18' },
+  { dayKey: 'w2_sun', date: '2026-04-19' },
+];
+const ROLLOVER_HOUR = 6; // Before this hour, the *previous* calendar date still counts.
+
+// Pick the soonest festival day that hasn't ended yet, relative to `now`.
+// "Hasn't ended" = today's calendar date (with a 6 AM cutoff that keeps the
+// prior day "active" until dawn) is ≤ the festival day's date. If the whole
+// festival is over, fall back to w2_sun so the last plan stays accessible.
+export function getDefaultDayKey(now = new Date()) {
+  // Compute the "effective date" — if it's before 6 AM, treat it as yesterday
+  // so late-night Saturday at 2 AM still shows Saturday.
+  const effective = new Date(now);
+  if (effective.getHours() < ROLLOVER_HOUR) {
+    effective.setDate(effective.getDate() - 1);
+  }
+  const today = isoDate(effective);
+
+  for (const entry of FESTIVAL_DAYS) {
+    if (today <= entry.date) return entry.dayKey;
+  }
+  return FESTIVAL_DAYS[FESTIVAL_DAYS.length - 1].dayKey;
+}
+
+function isoDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}

@@ -1,5 +1,5 @@
 // Mobile wiring. Reuses the existing data/solver/share modules unchanged.
-import { loadDay, loadVenues } from './data.js';
+import { loadDay, loadVenues, getDefaultDayKey } from './data.js';
 import { solve } from './solver.js';
 import { encodeState, decodeState } from './share.js';
 import { exportScheduleImage } from './export-image.js';
@@ -7,7 +7,7 @@ import { maybeShowOnboarding, showOnboarding } from './onboarding.js';
 import { renderMobileTimeline, renderIssues } from './mobile-ui.js';
 
 const state = {
-  dayKey: 'w1_fri',
+  dayKey: getDefaultDayKey(),
   speed: 'normal',
   paddingMin: 2,
   acts: [],
@@ -64,6 +64,8 @@ async function init() {
     el.paddingInput.value = String(state.paddingMin);
     await loadDayData(state.dayKey, { picksBuilder: shared.picksBuilder });
   } else {
+    // Sync the day-picker to the computed default.
+    el.daySelect.value = state.dayKey;
     await loadDayData(state.dayKey);
   }
 

@@ -16,6 +16,36 @@ const state = {
   activeId: null, // id currently being dragged/slid
 };
 
+// --- LocalStorage persistence (per-day) ---
+const STORAGE_PREFIX = 'plan_';
+
+function saveToLocalStorage() {
+  if (state.picks.size === 0) {
+    try { localStorage.removeItem(STORAGE_PREFIX + state.dayKey); } catch (e) {}
+    return;
+  }
+  try {
+    const encoded = encodeState({
+      dayKey: state.dayKey,
+      speed: state.speed,
+      paddingMin: state.paddingMin,
+      picks: state.picks,
+      acts: state.acts,
+    });
+    localStorage.setItem(STORAGE_PREFIX + state.dayKey, encoded);
+  } catch (e) {}
+}
+
+function loadFromLocalStorage(dayKey) {
+  try {
+    const encoded = localStorage.getItem(STORAGE_PREFIX + dayKey);
+    if (!encoded) return null;
+    return decodeState(encoded);
+  } catch (e) {
+    return null;
+  }
+}
+
 const el = {
   daySelect: document.getElementById('day-select'),
   speedSelect: document.getElementById('speed-select'),
@@ -78,12 +108,27 @@ async function init() {
     // Sync the day-picker to whatever default we computed (today's festival
     // day or the next one upcoming).
     el.daySelect.value = state.dayKey;
-    await loadDayData(state.dayKey);
+    // Try restoring a previously saved plan for this day.
+    const saved = loadFromLocalStorage(state.dayKey);
+    if (saved) {
+      state.speed = saved.speed ?? state.speed;
+      state.paddingMin = saved.paddingMin ?? state.paddingMin;
+      el.speedSelect.value = state.speed;
+      el.paddingInput.value = String(state.paddingMin);
+      await loadDayData(state.dayKey, { picksBuilder: saved.picksBuilder });
+    } else {
+      await loadDayData(state.dayKey);
+    }
   }
 
   el.daySelect.addEventListener('change', async () => {
     state.dayKey = el.daySelect.value;
-    await loadDayData(state.dayKey);
+    const saved = loadFromLocalStorage(state.dayKey);
+    if (saved) {
+      await loadDayData(state.dayKey, { picksBuilder: saved.picksBuilder });
+    } else {
+      await loadDayData(state.dayKey);
+    }
   });
   el.speedSelect.addEventListener('change', () => {
     state.speed = el.speedSelect.value;
@@ -356,6 +401,7 @@ function rerender() {
     onCycleTier,
   });
   renderIssues(el.issues, result);
+  saveToLocalStorage();
 }
 
 function onCycleTier(actId, nextTier) {
